@@ -37,6 +37,22 @@ def stop_recording():
         recording = False
         print("Recording stopped.")
 
+import gpiod
+
+IRLED= 16
+# start time default is 17:00 and turn it off next day at 5:00
+chip = gpiod.Chip('gpiochip4')
+LED_LINE = chip.get_line(IRLED)
+LED_LINE.request(consumer="LED", type=gpiod.LINE_REQ_DIR_OUT, flags=gpiod.LINE_REQ_FLAG_BIAS_PULL_UP)
+def relay_on_time_between():
+    start_time = 17
+    end_time = 5
+    current_time = datetime.now().hour
+    if current_time >= start_time or current_time <= end_time:
+        LED_LINE.set_value(0)
+    else:
+        LED_LINE.set_value(1)
+
 # Capture the first frame
 with picamera.array.PiRGBArray(camera) as stream:
     camera.capture(stream, format='rgb')
