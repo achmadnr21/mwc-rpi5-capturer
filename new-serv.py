@@ -71,8 +71,6 @@ while True:
             recording = False
             print("[INFO] Recording stopped due to inactivity.")
 
-    # Show the frame
-    cv2.imshow('Motion Detection', frame)
 
     # Exit on 'q' key press
     key = cv2.waitKey(1) & 0xFF
