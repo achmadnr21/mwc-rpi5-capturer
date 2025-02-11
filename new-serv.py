@@ -59,7 +59,7 @@ camera.start()
 
 # initial frame
 prev_frame = camera.capture_array()
-prev_frame = np.mean(frame, axis=2)
+prev_frame = np.mean(prev_frame, axis=2)
 try:
     while True:
         # capture current frame
