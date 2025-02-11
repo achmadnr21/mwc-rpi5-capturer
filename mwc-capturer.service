@@ -1,0 +1,14 @@
+[Unit]
+Description=MarkasWalet Dataset Capturer
+After=network.target
+
+[Service]
+WorkingDirectory=/usr/local/bin/mwc-capturer/
+ExecStart=python3 mwc-capturer.py > log.txt
+ExecStop=pkill -f mwc-capturer.py
+Restart=always
+User=root
+Group=root
+
+[Install]
+WantedBy=multi-user.target
