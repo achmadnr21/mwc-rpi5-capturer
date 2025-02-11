@@ -109,7 +109,5 @@ finally:
     chip.close()
     recording = False
     last_motion_time = None
-    LED_LINE.release()
-    chip.close()
     print("Program dihentikan.")
     
