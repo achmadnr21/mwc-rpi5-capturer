@@ -11,7 +11,9 @@ from picamera2.outputs import FileOutput
 camera = Picamera2()
 video_config = camera.create_video_configuration(main={"size": (640, 480)})
 camera.configure(video_config)
+camera.start_preview(Preview.NULL)
 camera.start()
+
 
 # Background subtractor for motion detection
 back_sub = cv2.createBackgroundSubtractorMOG2(history=25, varThreshold=20, detectShadows=True)
