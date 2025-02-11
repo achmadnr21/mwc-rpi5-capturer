@@ -3,7 +3,7 @@ import time
 import datetime
 import numpy as np
 import cv2
-from picamera2 import Picamera2
+from picamera2 import Picamera2, Preview
 from picamera2.encoders import H264Encoder
 from picamera2.outputs import FileOutput
 
