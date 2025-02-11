@@ -79,7 +79,7 @@ prev_frame = np.mean(frame, axis=2)  # Convert to grayscale
 # Main loop
 try:
     while True:
-        relay_on_time_between
+        relay_on_time_between()
         frame = camera.capture_array()
         curr_frame = np.mean(frame, axis=2)  # Convert to grayscale
 
