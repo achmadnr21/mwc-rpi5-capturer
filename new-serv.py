@@ -66,40 +66,39 @@ def relay_on_time_between():
 
 
 try:
-    # Mulai kamera
-    camera.start()
-
-    # Ambil frame awal untuk referensi
-    prev_frame = camera.capture_array()
-    prev_frame = cv2.cvtColor(prev_frame, cv2.COLOR_RGB2GRAY)
-    prev_frame = cv2.GaussianBlur(prev_frame, (21, 21), 0)  # Blur untuk mengurangi noise
     while True:
-        # Ambil frame baru
-        frame = camera.capture_array()
-        curr_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
-        curr_frame = cv2.GaussianBlur(curr_frame, (21, 21), 0)
+        # Mulai kamera
+        camera.start()
 
-        isDetect = detect_motion(prev_frame, curr_frame)
+        # Ambil frame awal untuk referensi
+        prev_frame = camera.capture_array()
+        prev_frame = cv2.cvtColor(prev_frame, cv2.COLOR_RGB2GRAY)
+        prev_frame = cv2.GaussianBlur(prev_frame, (21, 21), 0)  # Blur untuk mengurangi noise
+        while True:
+            # Ambil frame baru
+            frame = camera.capture_array()
+            curr_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
+            curr_frame = cv2.GaussianBlur(curr_frame, (21, 21), 0)
 
-        if isDetect:
-            if not recording:
-                start_recording()
-            last_motion_time = time.time()
-        else:
-            if recording and last_motion_time and time.time() - last_motion_time > motion_timeout:
-                stop_recording()
-                break
+            isDetect = detect_motion(prev_frame, curr_frame)
 
-        relay_on_time_between()
-        prev_frame = curr_frame  # Perbarui frame referensi
-        time.sleep(0.1)  # Jeda untuk mengurangi beban CPU
-    camera.stop()
-    LED_LINE.release()
-    chip.close()
-    # reset all the parameters needed like recording, last_motion_time, etc.
-    recording = False
-    last_motion_time = None
-    print("Program dihentikan.")
+            if isDetect:
+                if not recording:
+                    start_recording()
+                last_motion_time = time.time()
+            else:
+                if recording and last_motion_time and time.time() - last_motion_time > motion_timeout:
+                    stop_recording()
+                    break
+
+            relay_on_time_between()
+            prev_frame = curr_frame  # Perbarui frame referensi
+            time.sleep(0.1)  # Jeda untuk mengurangi beban CPU
+        camera.stop() 
+        # reset all the parameters needed like recording, last_motion_time, etc.
+        recording = False
+        last_motion_time = None
+        print("Video Didapatkan")
 
 except KeyboardInterrupt:
     print("Program dihentikan oleh pengguna.")
@@ -110,6 +109,7 @@ finally:
     chip.close()
     recording = False
     last_motion_time = None
-    
+    LED_LINE.release()
+    chip.close()
     print("Program dihentikan.")
     
