@@ -9,7 +9,7 @@ from picamera2.encoders import H264Encoder
 from picamera2.outputs import FfmpegOutput
 
 # Parameter
-motion_threshold = 1  # Sensitivitas gerakan
+motion_threshold = 1.0  # Sensitivitas gerakan
 motion_timeout = 5  # Detik sebelum berhenti merekam jika tidak ada gerakan
 recording = False
 last_motion_time = None  # Waktu terakhir deteksi gerakan
