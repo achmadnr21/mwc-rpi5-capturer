@@ -1,8 +1,9 @@
 #!/bin/bash
 #install opencv
-sudo apt install python3-opencv
+sudo apt install python3-opencv -y
 sleep 2
 # Menyalin direktori ke /usr/local/bin/
+sudo mkdir -p /usr/local/bin/mwc-capturer/
 sudo cp -rf mwc-capturer.py /usr/local/bin/mwc-capturer/
 sleep 2
 # Menyalin file service ke /etc/systemd/system/
