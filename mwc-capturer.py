@@ -3,6 +3,7 @@ import picamera.array
 import numpy as np
 import time
 from datetime import datetime
+import gpiod
 
 # Camera and motion detection settings
 motion_threshold = 10  # Adjust sensitivity (higher = less sensitive)
@@ -37,7 +38,7 @@ def stop_recording():
         recording = False
         print("Recording stopped.")
 
-import gpiod
+
 
 IRLED= 16
 # start time default is 17:00 and turn it off next day at 5:00
