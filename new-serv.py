@@ -63,15 +63,16 @@ def relay_on_time_between():
     current_time = datetime.now().hour
     LED_LINE.set_value(0 if current_time >= start_time or current_time <= end_time else 1)
 
-# Mulai kamera
-camera.start()
 
-# Ambil frame awal untuk referensi
-prev_frame = camera.capture_array()
-prev_frame = cv2.cvtColor(prev_frame, cv2.COLOR_RGB2GRAY)
-prev_frame = cv2.GaussianBlur(prev_frame, (21, 21), 0)  # Blur untuk mengurangi noise
 
 try:
+    # Mulai kamera
+    camera.start()
+
+    # Ambil frame awal untuk referensi
+    prev_frame = camera.capture_array()
+    prev_frame = cv2.cvtColor(prev_frame, cv2.COLOR_RGB2GRAY)
+    prev_frame = cv2.GaussianBlur(prev_frame, (21, 21), 0)  # Blur untuk mengurangi noise
     while True:
         # Ambil frame baru
         frame = camera.capture_array()
@@ -87,16 +88,28 @@ try:
         else:
             if recording and last_motion_time and time.time() - last_motion_time > motion_timeout:
                 stop_recording()
+                break
 
         relay_on_time_between()
         prev_frame = curr_frame  # Perbarui frame referensi
         time.sleep(0.1)  # Jeda untuk mengurangi beban CPU
+    camera.stop()
+    LED_LINE.release()
+    chip.close()
+    # reset all the parameters needed like recording, last_motion_time, etc.
+    recording = False
+    last_motion_time = None
+    print("Program dihentikan.")
 
 except KeyboardInterrupt:
     print("Program dihentikan oleh pengguna.")
 
 finally:
-    camera.stop()
+    camera.close()
     LED_LINE.release()
     chip.close()
+    recording = False
+    last_motion_time = None
+    
     print("Program dihentikan.")
+    
