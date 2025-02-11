@@ -1,27 +1,37 @@
+import os
 import time
 from datetime import datetime
 import numpy as np
 import gpiod
 from picamera2 import Picamera2, Preview
 from picamera2.encoders import H264Encoder
-from picamera2.outputs import FileOutput
+from picamera2.outputs import FfmpegOutput
 
 # Camera and motion detection settings
-motion_threshold = 10  # Adjust sensitivity (higher = less sensitive)
-recording_duration = 180  # 3 minutes (180 seconds)
+motion_threshold = 8  # Adjust sensitivity (higher = less sensitive)
+recording_duration = 30  # 30 mnt
 recording = False
 recording_start_time = None
 
 # Initialize camera
 camera = Picamera2()
-camera.configure(camera.create_still_configuration())
 
-# Configure preview
+# Configure the camera for video (not still images)
+video_config = camera.create_video_configuration()
+camera.configure(video_config)
+
+# Configure preview (optional, useful for background operations)
 camera.start_preview(Preview.NULL)  # No preview, useful for background operations
+
+output_folder = "recordings"
+
+# Create the folder if it doesn't exist
+if not os.path.exists(output_folder):
+    os.makedirs(output_folder)
 
 # Initialize encoder and file output for recording
 encoder = H264Encoder()
-output = FileOutput()
+#output = FfmpegOutput(f"motion_{datetime.now().strftime('%Y%m%d_%H%M%S')}.mp4")
 
 def detect_motion(prev_frame, curr_frame):
     """Detect motion by comparing frame differences."""
@@ -30,12 +40,13 @@ def detect_motion(prev_frame, curr_frame):
 
 def start_recording():
     """Start recording a new video file."""
-    global recording, recording_start_time
+    global recording, recording_start_time, output
     recording = True
     recording_start_time = time.time()
-    filename = f"motion_{datetime.now().strftime('%Y%m%d_%H%M%S')}.h264"
-    camera.start_recording(encoder, output, filename)
-    print(f"Recording started: {filename}")
+    # Update the output with a new filename based on the current time
+    output = FfmpegOutput(f"{output_folder}/motion_{datetime.now().strftime('%Y%m%d_%H%M%S')}.mp4")
+    camera.start_recording(encoder, output)
+    print(f"Recording started...")
 
 def stop_recording():
     """Stop recording."""
@@ -46,7 +57,7 @@ def stop_recording():
         print("Recording stopped.")
 
 IRLED = 16
-# start time default is 17:00 and turn it off next day at 5:00
+# Start time default is 17:00 and turn it off next day at 5:00
 chip = gpiod.Chip('gpiochip4')
 LED_LINE = chip.get_line(IRLED)
 LED_LINE.request(consumer="LED", type=gpiod.LINE_REQ_DIR_OUT, flags=gpiod.LINE_REQ_FLAG_BIAS_PULL_UP)
@@ -68,6 +79,7 @@ prev_frame = np.mean(frame, axis=2)  # Convert to grayscale
 # Main loop
 try:
     while True:
+        relay_on_time_between
         frame = camera.capture_array()
         curr_frame = np.mean(frame, axis=2)  # Convert to grayscale
 
