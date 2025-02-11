@@ -1,3 +1,5 @@
+#!/bin/bash
+#install opencv
 sudo apt install python3-opencv
 sleep 2
 # Menyalin direktori ke /usr/local/bin/
