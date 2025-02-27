@@ -61,7 +61,12 @@ def relay_on_time_between():
     start_time = 17
     end_time = 5
     current_time = datetime.now().hour
-    LED_LINE.set_value(0 if current_time >= start_time or current_time <= end_time else 1)
+    if current_time >= start_time or current_time <= end_time:
+        LED_LINE.set_value(0)
+        print("LED is ON")
+    else:
+        LED_LINE.set_value(1)
+        print("LED is OFF")
 
 
 
