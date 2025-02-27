@@ -67,6 +67,7 @@ def relay_on_time_between():
 
 try:
     while True:
+        relay_on_time_between()
         # Mulai kamera
         camera.start()
 
@@ -90,8 +91,6 @@ try:
                 if recording and last_motion_time and time.time() - last_motion_time > motion_timeout:
                     stop_recording()
                     break
-
-            relay_on_time_between()
             prev_frame = curr_frame  # Perbarui frame referensi
             time.sleep(0.1)  # Jeda untuk mengurangi beban CPU
         camera.stop() 
