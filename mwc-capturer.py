@@ -81,6 +81,7 @@ try:
         prev_frame = cv2.cvtColor(prev_frame, cv2.COLOR_RGB2GRAY)
         prev_frame = cv2.GaussianBlur(prev_frame, (21, 21), 0)  # Blur untuk mengurangi noise
         while True:
+            relay_on_time_between()
             # Ambil frame baru
             frame = camera.capture_array()
             curr_frame = cv2.cvtColor(frame, cv2.COLOR_RGB2GRAY)
