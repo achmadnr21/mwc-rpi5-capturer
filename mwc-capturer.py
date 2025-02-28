@@ -31,7 +31,7 @@ def detect_motion(prev_frame, curr_frame):
     _, thresh = cv2.threshold(diff, 25, 255, cv2.THRESH_BINARY)
     motion_level = np.sum(thresh) / thresh.size
     detector = motion_level > motion_threshold
-    print(f"[\rMotion Detected] Motion level: {motion_level:.2f}")
+    print(f"\r[Motion Detected] Motion level: {motion_level:.2f}", end='')
     return detector
 
 
